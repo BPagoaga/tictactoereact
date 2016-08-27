@@ -55,139 +55,27 @@
 	
 	var _reactDom = __webpack_require__(/*! react-dom */ 34);
 	
+	var _Board = __webpack_require__(/*! ./Board.jsx */ 172);
+	
+	var _Board2 = _interopRequireDefault(_Board);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	//import AwesomeComponent from './AwesomeComponent.jsx';
-	
-	// class App extends React.Component {
-	//   render () {
-	//     return(
-	//     	<div>
-	//         <p> Hello React!</p>
-	//         <AwesomeComponent />
-	//       </div>
-	//     );
-	//   }
-	// }
-	
-	//render(<App/>, document.getElementById('app'));
-	
-	
 	(function () {
-	  // create the board
-	  var Board = _react2.default.createClass({
-	    displayName: 'Board',
 	
-	    getInitialState: function getInitialState() {
-	      return {
-	        //Initial state of the game board.
-	        cells: ['', '', '', '', '', '', '', '', ''],
-	        //O always have the first go.
-	        turn: "o"
-	      };
-	    },
-	    //choosing X or O
+		// class App extends React.Component {
+		//   render () {
+		//     return(
+		//     	<Board />
+		//     );
+		//   }
+		// }
 	
-	    turn: $('#setPlayerModal button').click(function () {
-	      return $(this).val();
-	    }),
 	
-	    resetGame: function resetGame() {
-	      this.setState(this.getInitialState());
-	    },
-	    //Cell click method to modify the state of the tiles array
-	    cellClick: function cellClick(position, player) {
-	      var cells = this.state.cells;
-	      //If the selected position is already filled, return to prevent it being replaced.
-	      if (cells[position] === 'x' || cells[position] === 'o') return;
-	      cells[position] = player;
-	      this.setState({ cells: cells, turn: player === 'o' ? 'x' : 'o' });
-	    },
-	    render: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        { id: 'game', className: 'container' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'row' },
-	          this.state.cells.map(function (cell, pos) {
-	            return _react2.default.createElement(Cell, { status: cell, keyy: pos, turn: this.state.turn, cellClick: this.cellClick });
-	          }, this)
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'row' },
-	          _react2.default.createElement(Menu, { resetGame: this.resetGame, turn: this.state.turn })
-	        )
-	      );
-	    } //end render
-	  }); //end Board
-	
-	  //The cell component (green)
-	  var Cell = _react2.default.createClass({
-	    displayName: 'Cell',
-	
-	    //The method to handle when a user clicks on the cell, calls the cellClick method on the parent component that is referenced in the props object.
-	
-	    clickHandler: function clickHandler() {
-	      this.props.cellClick(this.props.keyy, this.props.turn);
-	    },
-	    render: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        { className: this.props.status === '' ? 'col-xs-4 cell' : 'col-xs-4 cell status-' + this.props.status, onClick: this.clickHandler },
-	        this.props.status
-	      );
-	    }
-	  });
-	  //The menu (blue)
-	  var Menu = _react2.default.createClass({
-	    displayName: 'Menu',
-	
-	    clickHandler: function clickHandler() {
-	      this.props.resetGame();
-	    },
-	    render: function render() {
-	      return _react2.default.createElement(
-	        'nav',
-	        { id: 'menu', onClick: this.clickHandler, className: 'text-center' },
-	        _react2.default.createElement(
-	          'a',
-	          { id: 'reset', className: 'btn btn-warning' },
-	          'Reset'
-	        ),
-	        _react2.default.createElement('br', null),
-	        _react2.default.createElement(
-	          'p',
-	          null,
-	          'It\'s ',
-	          this.props.turn.toUpperCase(),
-	          '\'s turn !'
-	        )
-	      );
-	    }
-	  });
-	
-	  // ReactDOM.render(
-	  //   <Board />,
-	  //   document.getElementById('app')
-	  // );
-	  (0, _reactDom.render)(_react2.default.createElement(Board, null), document.getElementById('app'));
+		(0, _reactDom.render)(_react2.default.createElement(_Board2.default, null), document.getElementById('app'));
 	})();
-	
-	$(document).ready(function () {
-	  $('#setPlayerModal').modal({
-	    backdrop: false,
-	    keyboard: false
-	  });
-	});
-	
-	$('#reset').click(function () {
-	  $('#setPlayerModal').modal({
-	    backdrop: false,
-	    keyboard: false
-	  });
-	});
+	//import AwesomeComponent from './AwesomeComponent.jsx';
+	// The Board, containing all the cells
 
 /***/ },
 /* 1 */
@@ -22052,6 +21940,310 @@
 	
 	module.exports = ReactDOMNullInputValuePropHook;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! (webpack)/~/node-libs-browser/~/process/browser.js */ 3)))
+
+/***/ },
+/* 172 */
+/*!**********************************!*\
+  !*** ./src/client/app/Board.jsx ***!
+  \**********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _Cell = __webpack_require__(/*! ./Cell.jsx */ 173);
+	
+	var _Cell2 = _interopRequireDefault(_Cell);
+	
+	var _Menu = __webpack_require__(/*! ./Menu.jsx */ 174);
+	
+	var _Menu2 = _interopRequireDefault(_Menu);
+	
+	var _Modal = __webpack_require__(/*! ./Modal.jsx */ 175);
+	
+	var _Modal2 = _interopRequireDefault(_Modal);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	// The cell component
+	
+	// The menu
+	
+	// The Modal
+	
+	
+	// create the board
+	var Board = function (_React$Component) {
+	  _inherits(Board, _React$Component);
+	
+	  //getInitialState:
+	  function Board(props) {
+	    _classCallCheck(this, Board);
+	
+	    // ?
+	
+	    var _this = _possibleConstructorReturn(this, (Board.__proto__ || Object.getPrototypeOf(Board)).call(this, props));
+	
+	    _this.state = {
+	      //Initial state of the game board.
+	      cells: props.initialCells,
+	      //O always have the first go.
+	      turn: props.initialTurn
+	    };
+	
+	    _this.cellClick = _this.cellClick.bind(_this);
+	    _this.resetGame = _this.resetGame.bind(_this);
+	    return _this;
+	  }
+	
+	  //choosing X or O
+	
+	  // turn () {$('#setPlayerModal button')
+	  //   this.setState();
+	  //   return $(this).val();
+	  // })
+	  //
+	
+	  _createClass(Board, [{
+	    key: 'resetGame',
+	    value: function resetGame() {
+	      this.setState({
+	        cells: ['', '', '', '', '', '', '', '', ''],
+	        turn: 'o'
+	      });
+	    }
+	
+	    //Cell click method to modify the state of the tiles array
+	
+	  }, {
+	    key: 'cellClick',
+	    value: function cellClick(position, player) {
+	      var cells = this.state.cells;
+	      //If the selected position is already filled, return to prevent it being replaced.
+	      if (cells[position] === 'x' || cells[position] === 'o') return;
+	      cells[position] = player;
+	      this.setState({ cells: cells, turn: player === 'o' ? 'x' : 'o' });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { id: 'game', className: 'container' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'row' },
+	          this.state.cells.map(function (cell, pos) {
+	            return _react2.default.createElement(_Cell2.default, { status: cell, keyy: pos, turn: this.state.turn, cellClick: this.cellClick });
+	          }, this)
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'row' },
+	          _react2.default.createElement(_Menu2.default, { resetGame: this.resetGame, turn: this.state.turn })
+	        )
+	      );
+	    } //end render
+	
+	  }]);
+	
+	  return Board;
+	}(_react2.default.Component);
+	
+	Board.defaultProps = {
+	  initialCells: ['', '', '', '', '', '', '', '', ''],
+	  initialTurn: 'o'
+	};
+	
+	exports.default = Board;
+
+/***/ },
+/* 173 */
+/*!*********************************!*\
+  !*** ./src/client/app/Cell.jsx ***!
+  \*********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	//The cell component (green)
+	var Cell = function (_React$Component) {
+	  _inherits(Cell, _React$Component);
+	
+	  function Cell(props) {
+	    _classCallCheck(this, Cell);
+	
+	    var _this = _possibleConstructorReturn(this, (Cell.__proto__ || Object.getPrototypeOf(Cell)).call(this, props));
+	
+	    _this.clickHandler = _this.clickHandler.bind(_this);
+	    return _this;
+	  }
+	  //The method to handle when a user clicks on the cell, calls the cellClick method on the parent component that is referenced in the props object.
+	
+	  _createClass(Cell, [{
+	    key: 'clickHandler',
+	    value: function clickHandler() {
+	      this.props.cellClick(this.props.keyy, this.props.turn);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: this.props.status === '' ? 'col-xs-4 cell' : 'col-xs-4 cell status-' + this.props.status, onClick: this.clickHandler },
+	        this.props.status
+	      );
+	    }
+	  }]);
+	
+	  return Cell;
+	}(_react2.default.Component);
+	
+	exports.default = Cell;
+
+/***/ },
+/* 174 */
+/*!*********************************!*\
+  !*** ./src/client/app/Menu.jsx ***!
+  \*********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	//The menu (blue)
+	var Menu = function (_React$Component) {
+	  _inherits(Menu, _React$Component);
+	
+	  function Menu(props) {
+	    _classCallCheck(this, Menu);
+	
+	    var _this = _possibleConstructorReturn(this, (Menu.__proto__ || Object.getPrototypeOf(Menu)).call(this, props));
+	
+	    _this.clickHandler = _this.clickHandler.bind(_this);
+	    return _this;
+	  }
+	
+	  _createClass(Menu, [{
+	    key: 'clickHandler',
+	    value: function clickHandler() {
+	      this.props.resetGame();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'nav',
+	        { id: 'menu', onClick: this.clickHandler, className: 'text-center' },
+	        _react2.default.createElement(
+	          'a',
+	          { id: 'reset', className: 'btn btn-warning' },
+	          'Reset'
+	        ),
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          'It\'s ',
+	          this.props.turn.toUpperCase(),
+	          '\'s turn !'
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Menu;
+	}(_react2.default.Component);
+	
+	exports.default = Menu;
+
+/***/ },
+/* 175 */
+/*!**********************************!*\
+  !*** ./src/client/app/Modal.jsx ***!
+  \**********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Modal = function (_React$Component) {
+	  _inherits(Modal, _React$Component);
+	
+	  function Modal() {
+	    _classCallCheck(this, Modal);
+	
+	    return _possibleConstructorReturn(this, (Modal.__proto__ || Object.getPrototypeOf(Modal)).apply(this, arguments));
+	  }
+	
+	  return Modal;
+	}(_react2.default.Component);
+	
+	exports.default = Modal;
 
 /***/ }
 /******/ ]);
