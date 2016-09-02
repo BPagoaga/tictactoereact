@@ -1,0 +1,56 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>React.js using NPM, Babel6 and Webpack</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" href="src/client/style.css">
+	</head>
+	<body>
+
+		<!-- Modal -->
+		<div id="setPlayerModal" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Tic Tac Toe Game</h4>
+					</div>
+					<div class="modal-body">
+						<p>Choose your side : X or O ?</p>
+					</div>
+					<div class="modal-footer">
+						<button value="x" type="button" class="btn btn-success" data-dismiss="modal">X</button>
+						<button value="o" type="button" class="btn btn-warning" data-dismiss="modal">O</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+		<div class="container-fluid">
+			<div class="row">
+				<h1 class=text-center>Tic Tac Toe Game with React.js</h1>
+				<div id="app" class="col-xs-12"></div>
+			</div>
+		</div>
+
+		<!-- Scripts -->
+		<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="src/client/public/bundle.js" type="text/javascript"></script>
+		<script type="javascript">
+			$(document).ready(function(){
+			  $('#setPlayerModal').modal({
+			    backdrop: false,
+			    keyboard: false
+			  });
+			});
+			$('#reset').click(function(){
+			  $('#setPlayerModal').modal({
+			    backdrop: false,
+			    keyboard: false
+			  });
+			});
+		</script>
+	</body>
+</html>
+
