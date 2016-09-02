@@ -6,16 +6,30 @@ import Board from './Board.jsx';
 
 (function(){
 
-	// class App extends React.Component {
-	//   render () {
-	//     return(
-	//     	<Board />
-	//     );
-	//   }
-	// }
+	class TicTacToe extends React.Component {
+		constructor(props){
+			super(props);
+
+			this.state = {
+				singlePlayer: true;
+			};
+
+			this.isSingle = this.isSingle.bind(this);
+		},
+
+		isSingle() {
+			this.setState({singlePlayer: true});
+		}
+
+	  render () {
+	    return(
+	    	<Board />
+	    );
+	  }
+	}
 
 
-	render(<Board/>, document.getElementById('app'));
+	render(<TicTacToe />, document.getElementById('app'));
 
 })();
 
