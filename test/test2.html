@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <script type="text/javascript">
+
+  function permutation(arr_dim_2){
+    var result = [];
+
+    for (var i = 0; i < arr_dim_2.length; i++) {
+      for (var j = 0; j < arr_dim_2.length; j++) {
+
+        result.push(arr_dim_2[j][i]);
+      }
+    }
+    console.log(result);
+    return result;
+  }
+
+  permutation([[0,1],[2,3]]);
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+
+  var cells = ['','','','','','','','','']; //return false
+  var cells2 = ['x','x','x','','','','','','']; // return true false false false
+  var cells3 = ['x','','','x','','','x','','']; // return false true false false
+  var cells4 = ['x','','','','x','','','','x']; // return false false true false
+  var cells5 = ['','','x','','x','','x','','']; // return false false false true
+  var x = "x";
+
+  function testWin(arr, turn){
+
+    var boardWidth = Math.sqrt(arr.length), // Board width
+        newArr = [];
+
+    newArr = addDim(arr, boardWidth);
+
+    // test horizontally
+    condition1 = testAlignItems(newArr, turn);
+
+    // test diagonal 1
+    condition3 = testDiagonalItems(newArr, turn);
+    // permute items
+
+    var permutedArr = permutation(newArr);
+
+    var switchedArr = switched(newArr);
+
+    // test vertically
+    condition2 = testAlignItems(permutedArr, turn);
+
+    // test diagonal 2
+    condition4 = testDiagonalItems(switchedArr, turn);
+
+    console.log(condition1 +"=" + condition2 + "="+ condition3 + "=" + condition4 );
+  }
+
+  // transform [0,1,2,3] into [[0,1],[2,3]]
+  function addDim(arr, dim){
+    var arr_dim_2 = [];
+
+    for (var i = 0; i < arr.length; i+=dim){
+      var subarray = [];
+
+      for (var j = i; j < i+dim; j++) {
+        subarray.push(arr[j]);
+      }
+      arr_dim_2.push(subarray);
+      //console.log(newArr);
+    }
+
+    return arr_dim_2;
+  }
+
+  // test if horizontal elements are equal, if used after permutation, test if vertical elements are equal
+  function testAlignItems(arr_dim_2, turn){
+    for (var i = 0; i < arr_dim_2.length; i++) {
+      if(arr_dim_2[i].join() !== ""){
+        return arr_dim_2[i].every(function(a){
+          return a === turn;
+        });
+      }
+    }
+  }
+
+  // test if the diagonal elements are equal, if used after switched, test if the element of the second diagonal are equal
+  function testDiagonalItems(arr_dim_2, turn){
+    var result = [];
+
+    for (var i = 0; i < arr_dim_2[0].length; i++) {
+      for (var j = 0; j < arr_dim_2[0].length; j++) {
+        if(i===j){
+          result.push( arr_dim_2[i][j] === turn );
+        }
+      }
+    }
+
+    return result.every(function(a){
+      return a;
+    });
+  }
+
+  // transform [[0,1],[2,3]] into [[0,2],[1,3]], allows you to use the same method for horizontal and vertical testing
+  function permutation(arr_dim_2){
+    var result = [];
+
+    for (var i = 0; i < arr_dim_2.length; i++) {
+      for (var j = 0; j < arr_dim_2.length; j++) {
+
+        result.push(arr_dim_2[j][i]);
+      }
+    }
+    result = addDim(result, arr_dim_2.length);
+
+    return result;
+  }
+
+  // transform [[0,1],[2,3]] into [[2,3],[0,1]]
+  function switched(arr_dim_2){
+    var result = [];
+
+    for (var i = 0; i < arr_dim_2.length; i++) {
+      result[i] = arr_dim_2[arr_dim_2.length - (i+1)];
+    }
+
+    return result;
+  }
+
+
+  testWin(cells5, x);
+
+  </script>
+</body>
+</html>
