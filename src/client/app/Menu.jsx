@@ -14,8 +14,21 @@ class Menu extends React.Component {
 
   render() {
     return (
-    	<nav id='menu' onClick={this.clickHandler} className="text-center"><a id="reset" className="btn btn-warning">Reset</a><br/><p>It's {this.props.turn.toUpperCase()}'s turn !</p></nav>
-    	);
+    	<nav id='menu' onClick={this.clickHandler} className="text-center"><a id="reset" className="btn btn-warning">Reset</a><br/>
+         {(() => {
+          if (this.props.win) {
+            return (
+              <p>{this.props.turn === 'o' ? 'X' : 'O' } won the game ! </p>
+            );
+          }else{
+            return (
+              <p>It's {this.props.turn.toUpperCase()}'s turn !</p>
+            );
+          }
+        })()
+        }
+      </nav>
+    );
   }
 }
 

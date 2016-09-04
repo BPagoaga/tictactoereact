@@ -8,8 +8,8 @@
   <script>
 
   var cells = ['','','','','','','','','']; //return false
-  var cells2 = ['x','x','x','','','','','','']; // return true false false false
-  var cells3 = ['x','','','x','','','x','','']; // return false true false false
+  var cells2 = ['','','','x','x','x','','','']; // return true false false false
+  var cells3 = ['','x','','','x','','','x','']; // return false true false false
   var cells4 = ['x','','','','x','','','','x']; // return false false true false
   var cells5 = ['','','x','','x','','x','','']; // return false false false true
   var x = "x";
@@ -37,8 +37,8 @@
 
     // test diagonal 2
     condition4 = testDiagonalItems(switchedArr, turn);
-
-    console.log(condition1 +"=" + condition2 + "="+ condition3 + "=" + condition4 );
+    console.log(condition2);
+    return condition1 || condition2 || condition3 || condition4;
   }
 
   // transform [0,1,2,3] into [[0,1],[2,3]]
@@ -60,11 +60,16 @@
 
   // test if horizontal elements are equal, if used after permutation, test if vertical elements are equal
   function testAlignItems(arr_dim_2, turn){
+
     for (var i = 0; i < arr_dim_2.length; i++) {
-      if(arr_dim_2[i].join() !== ""){
-        return arr_dim_2[i].every(function(a){
-          return a === turn;
-        });
+      var result;
+
+      result = arr_dim_2[i].every(function(a){
+        return a === turn;
+      });
+
+      if (result) {
+        return true;
       }
     }
   }
@@ -113,7 +118,7 @@
   }
 
 
-  testWin(cells5, x);
+  testWin(cells3, x);
 
   </script>
 </body>

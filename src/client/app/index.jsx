@@ -10,16 +10,16 @@ import Board from './Board.jsx';
 		constructor(props){
 			super(props);
 
-			this.state = {
-				singlePlayer: true;
-			};
+		// 	this.state = {
+		// 		singlePlayer: true
+		// 	};
 
-			this.isSingle = this.isSingle.bind(this);
-		},
-
-		isSingle() {
-			this.setState({singlePlayer: true});
+		// 	this.isSingle = this.isSingle.bind(this);
 		}
+
+		// isSingle() {
+		// 	this.setState({singlePlayer: true});
+		// }
 
 	  render () {
 	    return(

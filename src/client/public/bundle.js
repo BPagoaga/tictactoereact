@@ -49,6 +49,8 @@
 
 	'use strict';
 	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
 	var _react = __webpack_require__(/*! react */ 1);
 	
 	var _react2 = _interopRequireDefault(_react);
@@ -61,21 +63,47 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	(function () {
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-		// class App extends React.Component {
-		//   render () {
-		//     return(
-		//     	<Board />
-		//     );
-		//   }
-		// }
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	
-		(0, _reactDom.render)(_react2.default.createElement(_Board2.default, null), document.getElementById('app'));
-	})();
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	//import AwesomeComponent from './AwesomeComponent.jsx';
 	// The Board, containing all the cells
+	
+	
+	(function () {
+		var TicTacToe = function (_React$Component) {
+			_inherits(TicTacToe, _React$Component);
+	
+			function TicTacToe(props) {
+				_classCallCheck(this, TicTacToe);
+	
+				return _possibleConstructorReturn(this, (TicTacToe.__proto__ || Object.getPrototypeOf(TicTacToe)).call(this, props));
+	
+				// 	this.state = {
+				// 		singlePlayer: true
+				// 	};
+	
+				// 	this.isSingle = this.isSingle.bind(this);
+			}
+	
+			// isSingle() {
+			// 	this.setState({singlePlayer: true});
+			// }
+	
+			_createClass(TicTacToe, [{
+				key: 'render',
+				value: function render() {
+					return _react2.default.createElement(_Board2.default, null);
+				}
+			}]);
+	
+			return TicTacToe;
+		}(_react2.default.Component);
+	
+		(0, _reactDom.render)(_react2.default.createElement(TicTacToe, null), document.getElementById('app'));
+	})();
 
 /***/ },
 /* 1 */
@@ -21972,6 +22000,10 @@
 	
 	var _Modal2 = _interopRequireDefault(_Modal);
 	
+	var _Winner = __webpack_require__(/*! ./Winner.jsx */ 176);
+	
+	var _Winner2 = _interopRequireDefault(_Winner);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21984,6 +22016,8 @@
 	// The menu
 	
 	// The Modal
+	
+	// component called when there is a winner
 	
 	
 	// create the board
@@ -22002,11 +22036,13 @@
 	      //Initial state of the game board.
 	      cells: props.initialCells,
 	      //O always have the first go.
-	      turn: props.initialTurn
+	      turn: props.initialTurn,
+	      winner: props.initialWinner
 	    };
 	
 	    _this.cellClick = _this.cellClick.bind(_this);
 	    _this.resetGame = _this.resetGame.bind(_this);
+	    _this.testWin = _this.testWin.bind(_this);
 	    return _this;
 	  }
 	
@@ -22018,12 +22054,43 @@
 	  // })
 	  //
 	
+	
 	  _createClass(Board, [{
+	    key: 'testWin',
+	    value: function testWin(arr, turn) {
+	
+	      var boardWidth = Math.sqrt(arr.length),
+	          // Board width
+	      newArr = [];
+	
+	      newArr = addDim(arr, boardWidth);
+	
+	      // test horizontally
+	      var condition1 = testAlignItems(newArr, turn);
+	
+	      // test diagonal 1
+	      var condition3 = testDiagonalItems(newArr, turn);
+	      // permute items
+	
+	      var permutedArr = permutation(newArr);
+	
+	      var switchedArr = switched(newArr);
+	
+	      // test vertically
+	      var condition2 = testAlignItems(permutedArr, turn);
+	
+	      // test diagonal 2
+	      var condition4 = testDiagonalItems(switchedArr, turn);
+	
+	      return condition1 || condition2 || condition3 || condition4;
+	    }
+	  }, {
 	    key: 'resetGame',
 	    value: function resetGame() {
 	      this.setState({
 	        cells: ['', '', '', '', '', '', '', '', ''],
-	        turn: 'o'
+	        turn: 'o',
+	        winner: false
 	      });
 	    }
 	
@@ -22034,9 +22101,18 @@
 	    value: function cellClick(position, player) {
 	      var cells = this.state.cells;
 	      //If the selected position is already filled, return to prevent it being replaced.
-	      if (cells[position] === 'x' || cells[position] === 'o') return;
+	      if (cells[position] === 'x' || cells[position] === 'o' || this.state.winner) return;
 	      cells[position] = player;
 	      this.setState({ cells: cells, turn: player === 'o' ? 'x' : 'o' });
+	
+	      if (this.testWin(this.state.cells, this.state.turn)) {
+	        this.hasWinner();
+	      }
+	    }
+	  }, {
+	    key: 'hasWinner',
+	    value: function hasWinner() {
+	      this.setState({ winner: true });
 	    }
 	  }, {
 	    key: 'render',
@@ -22054,7 +22130,7 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'row' },
-	          _react2.default.createElement(_Menu2.default, { resetGame: this.resetGame, turn: this.state.turn })
+	          _react2.default.createElement(_Menu2.default, { resetGame: this.resetGame, turn: this.state.turn, win: this.state.winner })
 	        )
 	      );
 	    } //end render
@@ -22066,7 +22142,8 @@
 	
 	Board.defaultProps = {
 	  initialCells: ['', '', '', '', '', '', '', '', ''],
-	  initialTurn: 'o'
+	  initialTurn: 'o',
+	  initialWinner: false
 	};
 	
 	exports.default = Board;
@@ -22181,6 +22258,8 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+	
 	      return _react2.default.createElement(
 	        'nav',
 	        { id: 'menu', onClick: this.clickHandler, className: 'text-center' },
@@ -22190,13 +22269,24 @@
 	          'Reset'
 	        ),
 	        _react2.default.createElement('br', null),
-	        _react2.default.createElement(
-	          'p',
-	          null,
-	          'It\'s ',
-	          this.props.turn.toUpperCase(),
-	          '\'s turn !'
-	        )
+	        function () {
+	          if (_this2.props.win) {
+	            return _react2.default.createElement(
+	              'p',
+	              null,
+	              _this2.props.turn === 'o' ? 'X' : 'O',
+	              ' won the game ! '
+	            );
+	          } else {
+	            return _react2.default.createElement(
+	              'p',
+	              null,
+	              'It\'s ',
+	              _this2.props.turn.toUpperCase(),
+	              '\'s turn !'
+	            );
+	          }
+	        }()
 	      );
 	    }
 	  }]);
@@ -22244,6 +22334,100 @@
 	}(_react2.default.Component);
 	
 	exports.default = Modal;
+
+/***/ },
+/* 176 */
+/*!***********************************!*\
+  !*** ./src/client/app/Winner.jsx ***!
+  \***********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Winner = function (_React$Component) {
+	  _inherits(Winner, _React$Component);
+	
+	  function Winner(props) {
+	    _classCallCheck(this, Winner);
+	
+	    return _possibleConstructorReturn(this, (Winner.__proto__ || Object.getPrototypeOf(Winner)).call(this, props));
+	  }
+	
+	  _createClass(Winner, [{
+	    key: "render",
+	    value: function render() {
+	      return _react2.default.createElement(
+	        "div",
+	        { id: "setPlayerModal", className: "modal fade", tabindex: "-1", role: "dialog" },
+	        _react2.default.createElement(
+	          "div",
+	          { className: "modal-dialog", role: "document" },
+	          _react2.default.createElement(
+	            "div",
+	            { className: "modal-content" },
+	            _react2.default.createElement(
+	              "div",
+	              { className: "modal-header" },
+	              _react2.default.createElement(
+	                "button",
+	                { type: "button", className: "close", "data-dismiss": "modal", "aria-label": "Close" },
+	                _react2.default.createElement(
+	                  "span",
+	                  { "aria-hidden": "true" },
+	                  "×"
+	                )
+	              ),
+	              _react2.default.createElement(
+	                "h4",
+	                { className: "modal-title" },
+	                "Tic Tac Toe Game"
+	              )
+	            ),
+	            _react2.default.createElement(
+	              "div",
+	              { className: "modal-body" },
+	              _react2.default.createElement(
+	                "p",
+	                null,
+	                "Choose your side : X or O ?"
+	              )
+	            ),
+	            _react2.default.createElement(
+	              "div",
+	              { className: "modal-footer" },
+	              _react2.default.createElement(
+	                "button",
+	                { value: "x", type: "button", className: "btn btn-success", "data-dismiss": "modal" },
+	                "X"
+	              ),
+	              _react2.default.createElement(
+	                "button",
+	                { value: "o", type: "button", className: "btn btn-warning", "data-dismiss": "modal" },
+	                "O"
+	              )
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Winner;
+	}(_react2.default.Component);
 
 /***/ }
 /******/ ]);
