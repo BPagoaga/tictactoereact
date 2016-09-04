@@ -3,10 +3,6 @@ import React from 'react';
 import Cell from './Cell.jsx';
 // The menu
 import Menu from './Menu.jsx';
-// The Modal
-import Modal from './Modal.jsx';
-// component called when there is a winner
-import Winner from './Winner.jsx';
 
 
 // create the board
