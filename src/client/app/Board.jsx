@@ -76,6 +76,7 @@ class Board extends React.Component {
     cells[position] = player;
     this.setState({cells: cells, turn: player === 'o' ? 'x' : 'o'});
 
+    // not logical at all, fix it ! one function for one role
     if(this.testWin(this.state.cells, this.state.turn)){
       this.hasWinner();
     }
@@ -83,6 +84,16 @@ class Board extends React.Component {
 
   hasWinner(){
     this.setState({winner: true});
+  }
+
+  moveAi(arr){
+    var result = [];
+
+    // create an array of emtpy cells
+    result = arr.map(isNotEmpty).filter(isDefined);
+
+    // pick a random number in that array
+    return result[Math.floor(Math.random()*result.length)];
   }
 
 
