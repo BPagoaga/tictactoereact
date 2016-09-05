@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Ai</title>
+</head>
+<body>
+  <script type="text/javascript">
+
+    function moveAi(arr){
+      var result = [];
+
+      // create an array of emtpy cells
+      result = arr.map(isNotEmpty).filter(isDefined);
+
+      // avoid anonymous function for better debugging
+      function isNotEmpty(el, i, arr){
+        if(el !== ''){
+          return i;
+        }
+      }
+
+      function isDefined(el, i, arr){
+        return el !== undefined;
+      }
+
+      // pick a random number in that array
+      return result[Math.floor(Math.random()*result.length)];
+    }
+
+    // test
+    var testArray = ['','x','','o','o','',''];
+    moveAi(testArray);
+
+  </script>
+</body>
+</html>
