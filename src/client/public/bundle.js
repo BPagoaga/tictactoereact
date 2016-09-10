@@ -22074,6 +22074,9 @@
 	
 	      if (condition1 || condition2 || condition3 || condition4) {
 	        this.setState({ winner: true });
+	        setTimeout(function () {
+	          this.resetGame();
+	        }.bind(this), 2000);
 	      }
 	    }
 	  }, {
@@ -22129,6 +22132,12 @@
 	    value: function isATie(arr) {
 	      var result = [];
 	      result = arr.map(isEmpty).filter(isDefined);
+	
+	      if (result.length === 0) {
+	        setTimeout(function () {
+	          this.resetGame();
+	        }.bind(this), 2000);
+	      }
 	      return !result.length;
 	    }
 	  }, {
