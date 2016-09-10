@@ -77,8 +77,8 @@
   // first we create an array containing the keys of the emtpy cells into the cells array
   // then we select a random number in that array
   // return the index of an element if the element is not an empty string
-  function isNotEmpty(el, i, arr){
-    if(el !== ''){
+  function isEmpty(el, i, arr){
+    if(el === ''){
       return i;
     }
   }

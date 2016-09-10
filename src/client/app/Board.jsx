@@ -7,7 +7,6 @@ import Menu from './Menu.jsx';
 
 // create the board
 class Board extends React.Component {
-
   //getInitialState:
   constructor (props) {
     super(props); // ?
@@ -17,12 +16,15 @@ class Board extends React.Component {
       cells:  props.initialCells,
       //O always have the first go.
       turn: props.initialTurn,
+      singlePlayer: false,
       winner: props.initialWinner
     };
 
     this.cellClick = this.cellClick.bind(this);
     this.resetGame = this.resetGame.bind(this);
     this.testWin = this.testWin.bind(this);
+    this.moveAi = this.moveAi.bind(this);
+    this.setSingle = this.setSingle.bind(this);
   }
 
   //choosing X or O
@@ -44,10 +46,9 @@ class Board extends React.Component {
 
     // test diagonal 1
     var condition3 = testDiagonalItems(newArr, turn);
+
     // permute items
-
     let permutedArr = permutation(newArr);
-
     let switchedArr = switched(newArr);
 
     // test vertically
@@ -56,8 +57,9 @@ class Board extends React.Component {
     // test diagonal 2
     var condition4 = testDiagonalItems(switchedArr, turn);
 
-    return condition1 || condition2 || condition3 || condition4;
-
+    if(condition1 || condition2 || condition3 || condition4) {
+      this.setState({winner: true});
+    }
   }
 
   resetGame (){
@@ -70,30 +72,64 @@ class Board extends React.Component {
 
   //Cell click method to modify the state of the tiles array
   cellClick (position, player) {
-    let cells = this.state.cells;
-    //If the selected position is already filled, return to prevent it being replaced.
-    if ( (cells[position] === 'x' || cells[position] === 'o' || this.state.winner) ) return;
-    cells[position] = player;
-    this.setState({cells: cells, turn: player === 'o' ? 'x' : 'o'});
+    var cells = this.state.cells;
 
-    // not logical at all, fix it ! one function for one role
-    if(this.testWin(this.state.cells, this.state.turn)){
-      this.hasWinner();
+    //If the selected position is already filled, return to prevent it being replaced.
+    if( (cells[position] === 'x' || cells[position] === 'o' || this.state.winner) ){
+      return;
+    }else{
+      // else we can play
+      cells[position] = player;
+
+      this.setState({cells: cells});
+
+      // setState does not mutate this.state immediately !!!
+      this.testWin(this.state.cells, this.state.turn);
+
+      this.setState({turn: this.state.turn === 'o' ? 'x' : 'o'}, function(){
+        if(this.state.singlePlayer){
+          // if the mode single player is activated, we need to call the AI for the next move
+          this.moveAi(cells);
+
+        }
+
+
+      });
     }
+  }
+
+  setSingle(){
+    this.setState({singlePlayer: this.state.singlePlayer === true ? false : true});
+    this.resetGame();
   }
 
   hasWinner(){
     this.setState({winner: true});
   }
 
+  isATie(arr){
+    var result = [];
+    result = arr.map(isEmpty).filter(isDefined);
+    return !result.length;
+  }
+
   moveAi(arr){
     var result = [];
 
     // create an array of emtpy cells
-    result = arr.map(isNotEmpty).filter(isDefined);
+    result = arr.map(isEmpty).filter(isDefined);
 
     // pick a random number in that array
-    return result[Math.floor(Math.random()*result.length)];
+    arr[result[Math.floor(Math.random()*result.length)]] = this.state.turn;
+
+    this.setState({cells: arr}, function(){
+      this.testWin(this.state.cells, this.state.turn);
+
+      if(!this.state.winner){
+
+        this.setState({turn: this.state.turn === 'o' ? 'x' : 'o'});
+      }
+    });
   }
 
 
@@ -107,7 +143,7 @@ class Board extends React.Component {
       },this)}
       </div>
       <div className="row">
-        <Menu resetGame={this.resetGame} turn={this.state.turn} win={this.state.winner} />
+        <Menu resetGame={this.resetGame} turn={this.state.turn} win={this.state.winner} tie={this.isATie(this.state.cells)} setSingle={this.setSingle} />
       </div>
     </div>
     );
