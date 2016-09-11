@@ -30,10 +30,3 @@ class Button extends React.Component {
 }
 
 export default Button;
-
-// <div className="checkbox">
-//         <label>
-//           <input type="checkbox" value={this.props.checked} onClick={this.clickHandler} />
-//           Single Player
-//         </label>
-//       </div>

@@ -22019,7 +22019,7 @@
 	      cells: props.initialCells,
 	      //O always have the first go.
 	      turn: props.initialTurn,
-	      singlePlayer: false,
+	      singlePlayer: true,
 	      winner: props.initialWinner
 	    };
 	
@@ -22450,13 +22450,6 @@
 	}(_react2.default.Component);
 	
 	exports.default = Button;
-	
-	// <div className="checkbox">
-	//         <label>
-	//           <input type="checkbox" value={this.props.checked} onClick={this.clickHandler} />
-	//           Single Player
-	//         </label>
-	//       </div>
 
 /***/ },
 /* 176 */
@@ -22506,7 +22499,6 @@
 	    value: function handleChange() {
 	      this.setState({ checked: this.state.checked === true ? false : true }, function () {
 	        this.props.selected(this.state.checked);
-	        console.log(this.state.checked);
 	      });
 	    }
 	  }, {
@@ -22516,7 +22508,7 @@
 	          displayClass;
 	
 	      displayClass = display ? 'show' : 'hide';
-	
+	      console.log(displayClass);
 	      return _react2.default.createElement(
 	        'div',
 	        { className: displayClass, id: 'selectplayer' },

@@ -14,7 +14,6 @@ class SelectPlayer extends React.Component {
   handleChange(){
     this.setState({checked: this.state.checked === true ? false : true}, function(){
       this.props.selected(this.state.checked);
-      console.log(this.state.checked);
     });
   }
 
@@ -23,7 +22,7 @@ class SelectPlayer extends React.Component {
         displayClass;
 
     displayClass = display ? 'show' : 'hide';
-
+    console.log(displayClass);
     return(
       <div className={displayClass} id="selectplayer">
         <h2>Choose your side !</h2>
