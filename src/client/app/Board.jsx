@@ -17,7 +17,7 @@ class Board extends React.Component {
       cells:  props.initialCells,
       //O always have the first go.
       turn: props.initialTurn,
-      singlePlayer: false,
+      singlePlayer: true,
       winner: props.initialWinner
     };
 
