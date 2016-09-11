@@ -80,22 +80,16 @@
 				_classCallCheck(this, TicTacToe);
 	
 				return _possibleConstructorReturn(this, (TicTacToe.__proto__ || Object.getPrototypeOf(TicTacToe)).call(this, props));
-	
-				// 	this.state = {
-				// 		singlePlayer: true
-				// 	};
-	
-				// 	this.isSingle = this.isSingle.bind(this);
 			}
-	
-			// isSingle() {
-			// 	this.setState({singlePlayer: true});
-			// }
 	
 			_createClass(TicTacToe, [{
 				key: 'render',
 				value: function render() {
-					return _react2.default.createElement(_Board2.default, null);
+					return _react2.default.createElement(
+						'div',
+						{ className: 'row' },
+						_react2.default.createElement(_Board2.default, null)
+					);
 				}
 			}]);
 	
@@ -22034,6 +22028,7 @@
 	    _this.testWin = _this.testWin.bind(_this);
 	    _this.moveAi = _this.moveAi.bind(_this);
 	    _this.setSingle = _this.setSingle.bind(_this);
+	    _this.setTurn = _this.setTurn.bind(_this);
 	    return _this;
 	  }
 	
@@ -22123,6 +22118,12 @@
 	      this.resetGame();
 	    }
 	  }, {
+	    key: 'setTurn',
+	    value: function setTurn(turn) {
+	      this.resetGame();
+	      this.setState({ turn: turn ? 'o' : 'x' });
+	    }
+	  }, {
 	    key: 'hasWinner',
 	    value: function hasWinner() {
 	      this.setState({ winner: true });
@@ -22176,7 +22177,16 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'row' },
-	          _react2.default.createElement(_Menu2.default, { resetGame: this.resetGame, turn: this.state.turn, win: this.state.winner, tie: this.isATie(this.state.cells), setSingle: this.setSingle })
+	          _react2.default.createElement(_Menu2.default, {
+	            resetGame: this.resetGame,
+	            turn: this.state.turn,
+	            win: this.state.winner,
+	            tie: this.isATie(this.state.cells),
+	            setSingle: this.setSingle,
+	            singlePlayer: this.state.singlePlayer,
+	            setTurn: this.setTurn,
+	            checked: this.state.turn === 'o' ? true : false
+	          })
 	        )
 	      );
 	    } //end render
@@ -22279,6 +22289,10 @@
 	
 	var _Button2 = _interopRequireDefault(_Button);
 	
+	var _SelectPlayer = __webpack_require__(/*! ./SelectPlayer.jsx */ 176);
+	
+	var _SelectPlayer2 = _interopRequireDefault(_SelectPlayer);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -22298,6 +22312,7 @@
 	
 	    _this.clickHandler = _this.clickHandler.bind(_this);
 	    _this.buttonClick = _this.buttonClick.bind(_this);
+	    _this.selected = _this.selected.bind(_this);
 	    return _this;
 	  }
 	
@@ -22312,12 +22327,16 @@
 	      this.props.setSingle();
 	    }
 	  }, {
+	    key: 'selected',
+	    value: function selected(checked) {
+	      this.props.setTurn(checked);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
 	
 	      var winner = (this.props.turn === 'o' ? 'x' : 'o').toUpperCase();
-	
 	      return _react2.default.createElement(
 	        'nav',
 	        { id: 'menu', onClick: this.clickHandler, className: 'text-center' },
@@ -22351,7 +22370,8 @@
 	            );
 	          }
 	        }(),
-	        _react2.default.createElement(_Button2.default, { buttonClick: this.buttonClick })
+	        _react2.default.createElement(_Button2.default, { buttonClick: this.buttonClick }),
+	        _react2.default.createElement(_SelectPlayer2.default, { display: this.props.singlePlayer, selected: this.selected, checked: this.props.checked })
 	      );
 	    }
 	  }]);
@@ -22396,6 +22416,10 @@
 	
 	    var _this = _possibleConstructorReturn(this, (Button.__proto__ || Object.getPrototypeOf(Button)).call(this, props));
 	
+	    _this.state = {
+	      selectPlayer: true
+	    };
+	
 	    _this.clickHandler = _this.clickHandler.bind(_this);
 	    return _this;
 	  }
@@ -22404,18 +22428,19 @@
 	    key: "clickHandler",
 	    value: function clickHandler() {
 	      this.props.buttonClick();
+	      this.setState({ selectPlayer: this.selectPlayer === true ? false : true });
 	    }
 	  }, {
 	    key: "render",
 	    value: function render() {
 	      return _react2.default.createElement(
-	        "div",
-	        { className: "checkbox" },
+	        "section",
+	        { title: ".slideThree" },
 	        _react2.default.createElement(
-	          "label",
-	          null,
-	          _react2.default.createElement("input", { type: "checkbox", value: this.props.checked, onClick: this.clickHandler }),
-	          "Single Player"
+	          "div",
+	          { className: "slideThree" },
+	          _react2.default.createElement("input", { type: "checkbox", id: "slideThree", name: "check", onClick: this.clickHandler }),
+	          _react2.default.createElement("label", { htmlFor: "slideThree" })
 	        )
 	      );
 	    }
@@ -22425,6 +22450,113 @@
 	}(_react2.default.Component);
 	
 	exports.default = Button;
+	
+	// <div className="checkbox">
+	//         <label>
+	//           <input type="checkbox" value={this.props.checked} onClick={this.clickHandler} />
+	//           Single Player
+	//         </label>
+	//       </div>
+
+/***/ },
+/* 176 */
+/*!*****************************************!*\
+  !*** ./src/client/app/SelectPlayer.jsx ***!
+  \*****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var SelectPlayer = function (_React$Component) {
+	  _inherits(SelectPlayer, _React$Component);
+	
+	  function SelectPlayer(props) {
+	    _classCallCheck(this, SelectPlayer);
+	
+	    var _this = _possibleConstructorReturn(this, (SelectPlayer.__proto__ || Object.getPrototypeOf(SelectPlayer)).call(this, props));
+	
+	    _this.state = {
+	      checked: _this.props.checked
+	    };
+	
+	    _this.handleChange = _this.handleChange.bind(_this);
+	    return _this;
+	  }
+	
+	  _createClass(SelectPlayer, [{
+	    key: 'handleChange',
+	    value: function handleChange() {
+	      this.setState({ checked: this.state.checked === true ? false : true }, function () {
+	        this.props.selected(this.state.checked);
+	        console.log(this.state.checked);
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var display = this.props.display,
+	          displayClass;
+	
+	      displayClass = display ? 'show' : 'hide';
+	
+	      return _react2.default.createElement(
+	        'div',
+	        { className: displayClass, id: 'selectplayer' },
+	        _react2.default.createElement(
+	          'h2',
+	          null,
+	          'Choose your side !'
+	        ),
+	        _react2.default.createElement(
+	          'form',
+	          null,
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            _react2.default.createElement(
+	              'label',
+	              { className: 'radio-inline' },
+	              _react2.default.createElement('input', { type: 'radio', name: 'inlineRadioOptions', id: 'inlineRadio1', value: 'x', checked: !this.props.checked, onChange: this.handleChange }),
+	              ' X'
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            _react2.default.createElement(
+	              'label',
+	              { className: 'radio-inline' },
+	              _react2.default.createElement('input', { type: 'radio', name: 'inlineRadioOptions', id: 'inlineRadio2', value: 'o', checked: this.props.checked, onChange: this.handleChange }),
+	              ' O'
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return SelectPlayer;
+	}(_react2.default.Component);
+	
+	exports.default = SelectPlayer;
 
 /***/ }
 /******/ ]);

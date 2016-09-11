@@ -5,6 +5,7 @@ import Cell from './Cell.jsx';
 import Menu from './Menu.jsx';
 
 
+
 // create the board
 class Board extends React.Component {
   //getInitialState:
@@ -25,6 +26,7 @@ class Board extends React.Component {
     this.testWin = this.testWin.bind(this);
     this.moveAi = this.moveAi.bind(this);
     this.setSingle = this.setSingle.bind(this);
+    this.setTurn = this.setTurn.bind(this);
   }
 
   //choosing X or O
@@ -107,6 +109,12 @@ class Board extends React.Component {
     this.resetGame();
   }
 
+  setTurn(turn){
+    this.resetGame();
+    this.setState({turn: turn ? 'o' : 'x'});
+
+  }
+
   hasWinner(){
     this.setState({winner: true});
   }
@@ -147,18 +155,28 @@ class Board extends React.Component {
 
 
   render () {
-    return (
-      <div id="game" className="container"><div className="row">
-      {this.state.cells.map(function(cell,pos){
-          return (
-              <Cell status={cell} keyy={pos} turn={this.state.turn} cellClick={this.cellClick} />
-        );
-      },this)}
+    return(
+      <div id="game" className="container">
+        <div className="row">
+        {this.state.cells.map(function(cell,pos){
+            return (
+                <Cell status={cell} keyy={pos} turn={this.state.turn} cellClick={this.cellClick} />
+          );
+        },this)}
+        </div>
+        <div className="row">
+          <Menu
+            resetGame={this.resetGame}
+            turn={this.state.turn}
+            win={this.state.winner}
+            tie={this.isATie(this.state.cells)}
+            setSingle={this.setSingle}
+            singlePlayer={this.state.singlePlayer}
+            setTurn={this.setTurn}
+            checked={this.state.turn === 'o' ? true : false}
+          />
+        </div>
       </div>
-      <div className="row">
-        <Menu resetGame={this.resetGame} turn={this.state.turn} win={this.state.winner} tie={this.isATie(this.state.cells)} setSingle={this.setSingle} />
-      </div>
-    </div>
     );
   }//end render
 
