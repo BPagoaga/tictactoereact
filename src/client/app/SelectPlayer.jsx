@@ -22,7 +22,6 @@ class SelectPlayer extends React.Component {
         displayClass;
 
     displayClass = display ? 'show' : 'hide';
-    console.log(displayClass);
     return(
       <div className={displayClass} id="selectplayer">
         <h2>Choose your side !</h2>

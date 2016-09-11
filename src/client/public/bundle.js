@@ -22508,7 +22508,6 @@
 	          displayClass;
 	
 	      displayClass = display ? 'show' : 'hide';
-	      console.log(displayClass);
 	      return _react2.default.createElement(
 	        'div',
 	        { className: displayClass, id: 'selectplayer' },
